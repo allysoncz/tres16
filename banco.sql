@@ -42,3 +42,15 @@ CREATE TABLE IF NOT EXISTS vendas (
     pagamento VARCHAR(20),
     data      VARCHAR(20)
 );
+
+-- avaliações dos produtos pelos clientes
+CREATE TABLE IF NOT EXISTS avaliacoes (
+
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(50),
+    produto VARCHAR(120),
+    nota INT,
+    comentario TEXT,
+    data_avaliacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
