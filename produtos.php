@@ -50,12 +50,7 @@ if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
                 <?php echo htmlspecialchars($produto['nome']); ?>
             </h2>
 
-
-            <p>
-                Coleção premium Três16.
-            </p>
-
-
+            
             <h3>
                 R$ <?php echo $produto['preco']; ?>
             </h3>
@@ -64,6 +59,7 @@ if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
 
             <?php if(isset($_SESSION['usuario'])){ ?>
 
+                <div class="botoes-produtos">
 
                 <form action="carrinho.php" method="POST">
 
@@ -120,10 +116,12 @@ if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
                 </form>
 
 
-
-                <a href="avaliar.php?produto=<?php echo urlencode($produto['nome']); ?>">
+                
+                <a class="botao-avaliar" href="avaliar.php?produto=<?php echo urlencode($produto['nome']); ?>">
                     Avaliar produto
                 </a>
+
+                </div>  
 
                 <div class="avaliacoes-produto">
 
