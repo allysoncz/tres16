@@ -125,6 +125,71 @@ if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
                     Avaliar produto
                 </a>
 
+                <div class="avaliacoes-produto">
+
+                <h3>Avaliações</h3>
+
+
+                <?php
+
+                require_once 'app/avaliacoes.php';
+                require_once 'app/cons.php';
+
+
+                $resultadoAvaliacoes = buscarAvaliacoes(
+                    $produto['nome'],
+                    $server,
+                    $user,
+                    $password,
+                    $db
+                );
+
+
+                if($resultadoAvaliacoes->num_rows > 0){
+
+
+                while($avaliacao = $resultadoAvaliacoes->fetch_assoc()){
+
+
+                echo "
+
+                <div class='avaliacao-item'>
+
+                <strong>
+                ".$avaliacao['usuario']."
+                </strong>
+
+
+                <p class='estrelas'>
+                ".str_repeat("★",$avaliacao['nota'])."
+                </p>
+
+
+                <p>
+                ".$avaliacao['comentario']."
+                </p>
+
+
+                </div>
+
+                ";
+
+
+                }
+
+
+                }else{
+
+
+                echo "<p style='color:#777;'>Nenhuma avaliação ainda.</p>";
+
+
+                }
+
+
+                ?>
+
+                </div>
 
 
             <?php } else { ?>
