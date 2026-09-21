@@ -19,10 +19,10 @@ if(session_status() === PHP_SESSION_NONE){
         </ul>
     </nav>
     <div class="topo-direita">
-        <div class="buscar">
-            <input type="text" id="pesquisa" placeholder="Buscar produto...">
-            <button onclick="buscarProduto()">Buscar</button>
-        </div>
+        <form class="buscar" action="produtos.php" method="POST">
+            <input type="text" name="buscar" placeholder="Buscar produto...">
+            <button type="submit">Buscar</button>
+        </form>
         <?php if(isset($_SESSION['usuario'])){ ?>
         <strong class="usuario-logado"><?php echo htmlspecialchars($_SESSION['usuario']); ?></strong>
         <a href="carrinho.php" class="sacola"><img src="img/sacola.png" alt="Carrinho"></a>

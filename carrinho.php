@@ -15,14 +15,20 @@ $usuario = addslashes($_SESSION['usuario']);
 if(
     $_SERVER['REQUEST_METHOD'] === 'POST'
     &&
-    isset($_POST['produto'])
+    isset($_POST['produto_id'])
 ){
 
-    $produto = addslashes($_POST['produto']);
-    $preco = addslashes($_POST['preco']);
-    $imagem = addslashes($_POST['imagem']);
+    $produto_id = intval($_POST['produto_id']);
 
-    $consulta = "INSERT INTO carrinho (Id, usuario, produto, preco, imagem) VALUES (NULL, '$usuario', '$produto', '$preco', '$imagem')";
+    $consulta = "SELECT * FROM carrinho WHERE usuario = '$usuario' AND produto_id = $produto_id";
+    $resultado = banco($server, $user, $password, $db, $consulta);
+    $linha = $resultado->fetch_assoc();
+
+    if($linha){
+        $consulta = "UPDATE carrinho SET quantidade = quantidade + 1 WHERE Id = {$linha['Id']}";
+    }else{
+        $consulta = "INSERT INTO carrinho (Id, usuario, produto_id, quantidade) VALUES (NULL, '$usuario', $produto_id, 1)";
+    }
 
     banco($server, $user, $password, $db, $consulta);
 
@@ -34,7 +40,11 @@ if(
 
 $itens = [];
 
-$consulta = "SELECT * FROM carrinho WHERE usuario = '$usuario' order by Id";
+$consulta = "SELECT carrinho.Id, carrinho.quantidade, produtos.nome, produtos.preco, produtos.imagem
+             FROM carrinho
+             JOIN produtos ON carrinho.produto_id = produtos.Id
+             WHERE carrinho.usuario = '$usuario'
+             ORDER BY carrinho.Id";
 
 $resultado = banco($server, $user, $password, $db, $consulta);
 
@@ -49,7 +59,7 @@ foreach($itens as $item){
 
     $total += floatval(
         str_replace(',', '.', $item['preco'])
-    );
+    ) * $item['quantidade'];
 }
 
 ?>
@@ -144,7 +154,7 @@ alt="">
 
 <?php
 echo htmlspecialchars(
-$item['produto']
+$item['nome']
 );
 ?>
 
@@ -152,8 +162,7 @@ $item['produto']
 
 <h3>
 
-R$
-<?php echo $item['preco']; ?>
+Qtd: <?php echo $item['quantidade']; ?> — R$ <?php echo $item['preco']; ?>
 
 </h3>
 

@@ -19,7 +19,11 @@ $data = date('d/m/Y H:i:s');
 // itens do carrinho
 $itens = [];
 
-$consulta = "SELECT * FROM carrinho WHERE usuario = '$usuario' order by Id";
+$consulta = "SELECT carrinho.quantidade, produtos.nome, produtos.preco
+             FROM carrinho
+             JOIN produtos ON carrinho.produto_id = produtos.Id
+             WHERE carrinho.usuario = '$usuario'
+             ORDER BY carrinho.Id";
 
 $resultado = banco($server, $user, $password, $db, $consulta);
 
@@ -30,8 +34,9 @@ while($linha = $resultado->fetch_assoc()){
 
 foreach($itens as $item){
 
-    $produto = addslashes($item['produto']);
-    $valor = addslashes($item['preco']);
+    $produto = addslashes($item['nome']);
+    $valor = floatval(str_replace(',', '.', $item['preco'])) * $item['quantidade'];
+    $valor = number_format($valor, 2, ',', '.');
 
     $consulta = "INSERT INTO vendas (Id, numero, usuario, cpf, produto, valor, pagamento, data) VALUES (NULL, '$numero', '$usuario', '$cpf', '$produto', '$valor', '$pagamento', '$data')";
 
