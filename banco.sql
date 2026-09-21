@@ -22,13 +22,20 @@ CREATE TABLE IF NOT EXISTS acesso (
     senha   VARCHAR(255)
 );
 
+-- produtos da loja
+CREATE TABLE IF NOT EXISTS produtos (
+    Id     INT AUTO_INCREMENT PRIMARY KEY,
+    nome   VARCHAR(120),
+    preco  VARCHAR(20),
+    imagem VARCHAR(120)
+);
+
 -- carrinho de cada usuario
 CREATE TABLE IF NOT EXISTS carrinho (
-    Id      INT AUTO_INCREMENT PRIMARY KEY,
-    usuario VARCHAR(50),
-    produto VARCHAR(120),
-    preco   VARCHAR(20),
-    imagem  VARCHAR(120)
+    Id         INT AUTO_INCREMENT PRIMARY KEY,
+    usuario    VARCHAR(50),
+    produto_id INT,
+    quantidade INT DEFAULT 1
 );
 
 -- vendas (uma linha por produto)
@@ -54,3 +61,15 @@ CREATE TABLE IF NOT EXISTS avaliacoes (
     data_avaliacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 );
+
+INSERT INTO produtos (nome, preco, imagem) VALUES
+('GOD LOVES YOU', '94,90', 'img/2.jpeg'),
+('KING', '79,90', 'img/3.jpeg'),
+('O AMOR ME AMOU PRIMEIRO', '109,90', 'img/5.jpeg'),
+('O AMOR ME AMOU', '89,90', 'img/7.jpeg'),
+('NADA É IMPOSSÍVEL PARA DEUS', '94,90', 'img/13.jpeg'),
+('AVIVA-NOS', '109,90', 'img/15.jpeg'),
+('DAS MINHAS FERIDAS FEZ NASCER', '99,90', 'img/17.jpeg'),
+('ILUMINADA', '99,90', 'img/19.jpeg'),
+('DEUS ESTÁ CONOSCO', '89,90', 'img/21.jpeg'),
+('DIGNO', '129,90', 'img/23.jpeg');

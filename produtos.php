@@ -1,11 +1,20 @@
 <?php
 session_start();
-require_once 'includes/produtos_lista.php';
+include "app/cons.php";
+require_once "app/DLL.php";
 
-if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
-    $produtos = array_filter($produtos, function($p){
-        return str_contains(strtolower($p['nome']), strtolower(trim($_GET['buscar'])));
-    });
+$consulta = "SELECT * FROM produtos ORDER BY Id";
+
+if(isset($_POST['buscar']) && trim($_POST['buscar']) !== ''){
+    $busca = addslashes(trim($_POST['buscar']));
+    $consulta = "SELECT * FROM produtos WHERE nome LIKE '%$busca%' ORDER BY Id";
+}
+
+$resultado = banco($server, $user, $password, $db, $consulta);
+
+$produtos = [];
+while($linha = $resultado->fetch_assoc()){
+    $produtos[] = $linha;
 }
 ?>
 
@@ -39,8 +48,8 @@ if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
 
     <div class="produto">
 
-        <img 
-        src="<?php echo $produto['imagem']; ?>" 
+        <img
+        src="<?php echo $produto['imagem']; ?>"
         alt="<?php echo htmlspecialchars($produto['nome']); ?>">
 
 
@@ -50,7 +59,7 @@ if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
                 <?php echo htmlspecialchars($produto['nome']); ?>
             </h2>
 
-            
+
             <h3>
                 R$ <?php echo $produto['preco']; ?>
             </h3>
@@ -63,23 +72,10 @@ if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
 
                 <form action="carrinho.php" method="POST">
 
-                    <input 
-                    type="hidden" 
-                    name="produto" 
-                    value="<?php echo htmlspecialchars($produto['nome']); ?>">
-
-
-                    <input 
-                    type="hidden" 
-                    name="preco" 
-                    value="<?php echo $produto['preco']; ?>">
-
-
-                    <input 
-                    type="hidden" 
-                    name="imagem" 
-                    value="<?php echo $produto['imagem']; ?>">
-
+                    <input
+                    type="hidden"
+                    name="produto_id"
+                    value="<?php echo $produto['Id']; ?>">
 
                     <button type="submit">
                         Adicionar ao Carrinho
@@ -91,21 +87,21 @@ if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
 
                 <form action="confirmar.php" method="POST">
 
-                    <input 
-                    type="hidden" 
-                    name="produto" 
+                    <input
+                    type="hidden"
+                    name="produto"
                     value="<?php echo htmlspecialchars($produto['nome']); ?>">
 
 
-                    <input 
-                    type="hidden" 
-                    name="valor" 
+                    <input
+                    type="hidden"
+                    name="valor"
                     value="<?php echo $produto['preco']; ?>">
 
 
-                    <input 
-                    type="hidden" 
-                    name="imagem" 
+                    <input
+                    type="hidden"
+                    name="imagem"
                     value="<?php echo $produto['imagem']; ?>">
 
 
@@ -116,12 +112,20 @@ if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
                 </form>
 
 
-                
-                <a class="botao-avaliar" href="avaliar.php?produto=<?php echo urlencode($produto['nome']); ?>">
-                    Avaliar produto
-                </a>
+                <form class="form-avaliar" action="avaliar.php" method="POST">
 
-                </div>  
+                    <input
+                    type="hidden"
+                    name="produto"
+                    value="<?php echo htmlspecialchars($produto['nome']); ?>">
+
+                    <button type="submit" class="botao-avaliar">
+                        Avaliar produto
+                    </button>
+
+                </form>
+
+                </div>
 
                 <div class="avaliacoes-produto">
 
@@ -131,8 +135,6 @@ if(isset($_GET['buscar']) && trim($_GET['buscar']) !== ''){
                 <?php
 
                 require_once 'app/avaliacoes.php';
-                require_once 'app/cons.php';
-
 
                 $resultadoAvaliacoes = buscarAvaliacoes(
                     $produto['nome'],

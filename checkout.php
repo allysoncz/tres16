@@ -14,7 +14,11 @@ $usuario = addslashes($_SESSION['usuario']);
 
 $itens = [];
 
-$consulta = "SELECT * FROM carrinho WHERE usuario = '$usuario' order by Id";
+$consulta = "SELECT carrinho.quantidade, produtos.nome, produtos.preco, produtos.imagem
+             FROM carrinho
+             JOIN produtos ON carrinho.produto_id = produtos.Id
+             WHERE carrinho.usuario = '$usuario'
+             ORDER BY carrinho.Id";
 
 $resultado = banco($server, $user, $password, $db, $consulta);
 
@@ -34,7 +38,7 @@ foreach($itens as $item){
 
     $total += floatval(
         str_replace(',', '.', $item['preco'])
-    );
+    ) * $item['quantidade'];
 }
 
 ?>
@@ -89,7 +93,7 @@ alt="">
 
 <?php
 echo htmlspecialchars(
-$item['produto']
+$item['nome']
 );
 ?>
 
@@ -97,8 +101,7 @@ $item['produto']
 
 <h3>
 
-R$
-<?php echo $item['preco']; ?>
+Qtd: <?php echo $item['quantidade']; ?> — R$ <?php echo $item['preco']; ?>
 
 </h3>
 

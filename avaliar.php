@@ -2,7 +2,7 @@
 
 session_start();
 
-$produto = $_GET['produto'] ?? '';
+$produto = $_POST['produto'] ?? '';
 
 ?>
 
