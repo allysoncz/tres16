@@ -270,29 +270,29 @@ button:hover{
 }
 
 
-.botoes-produto{
+.botoes-produtos{
     display:flex;
     flex-direction:column;
     gap:12px;
 }
 
 
-.botoes-produto form{
+.botoes-produtos form{
     margin:0;
 }
 
 
-.botoes-produto form + form{
+.botoes-produtos form + form{
     margin-top:8px;
 }
 
-.botoes-produto button,
+.botoes-produtos button,
 .botao-avaliar{
     width:100%;
     height:40px;
 }
 
-.botoes-produto{
+.botoes-produtos{
     margin-bottom:10px;
 }
 
