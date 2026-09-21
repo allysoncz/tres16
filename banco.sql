@@ -11,15 +11,15 @@ CREATE TABLE IF NOT EXISTS usuarios (
     bairro   VARCHAR(60),
     cidade   VARCHAR(60),
     estado   VARCHAR(2),
-    cep      VARCHAR(15)
+    cep      VARCHAR(15),
+    usuario  VARCHAR(50)
 );
 
 -- login e senha
 CREATE TABLE IF NOT EXISTS acesso (
     Id      INT AUTO_INCREMENT PRIMARY KEY,
     usuario VARCHAR(50),
-    senha   VARCHAR(255),
-    cpf     VARCHAR(20)
+    senha   VARCHAR(255)
 );
 
 -- carrinho de cada usuario

@@ -20,7 +20,12 @@ if(!$linha){
 
 if(password_verify($_POST['senha'] ?? '', $linha['senha'])){
     $_SESSION['usuario'] = $linha['usuario'];
-    $_SESSION['cpf'] = $linha['cpf'];
+
+    $consulta = "SELECT cpf FROM usuarios WHERE usuario = '{$linha['usuario']}'";
+    $resultado = banco($server, $user, $password, $db, $consulta);
+    $dados = $resultado->fetch_assoc();
+    $_SESSION['cpf'] = $dados['cpf'] ?? '';
+
     header("Location: index.php");
     exit;
 }
